@@ -6,7 +6,7 @@
 #define DEFAULT_NRO "sdmc:/hbmenu.nro"
 
 const char g_noticeText[] =
-    "nx-hbloader " VERSION "\0"
+    "nro-forwarder " "V1.0.0" "\0"
     "Do you mean to tell me that you're thinking seriously of building that way, when and if you are an architect?";
 
 static char g_argv[2048];
