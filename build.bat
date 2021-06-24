@@ -28,8 +28,10 @@ if !n! LSS 11 goto loop
 set nrofile=%1
 set nropath=%2
 set id=%3
+set rompath=%4
 
 if "%id%"=="" set id=05%rand1%%rand2%%rand3%%rand4%%rand5%%rand6%%rand7%%rand8%%rand9%%rand10%%rand11%000
+if "%id%"=="rand" set id=05%rand1%%rand2%%rand3%%rand4%%rand5%%rand6%%rand7%%rand8%%rand9%%rand10%%rand11%000
 if "%nrofile%"=="" set id=05b25dc3089c0000
 
 echo.
@@ -37,11 +39,16 @@ echo Building...
 echo ID: %id%
 if not "%nropath%"=="" echo Path: %nropath%
 if not "%nrofile%"=="" echo File: %nrofile%
+if not "%romfile%"=="" echo Rom: %romfile%
 echo.
 
 if not "%nrofile%"=="" if "%nropath%"=="" echo Error: Need "nropath" to continue, aborting...
 if not "%nrofile%"=="" if "%nropath%"=="" pause
 if not "%nrofile%"=="" if "%nropath%"=="" exit
+
+if not "%rompath%"=="" if "%nropath%"=="romfs" echo Warning: Don't use "romfs mode" for "RetroArch Rom Forwarder", aborting...
+if not "%rompath%"=="" if "%nropath%"=="romfs" pause
+if not "%rompath%"=="" if "%nropath%"=="romfs" exit
 
 copy /Y default.npdm "exefs/main.npdm" >NUL
 if "%nropath%"=="" if "%nrofile%"=="" copy /Y default.dat "control/icon_AmericanEnglish.dat" >NUL
@@ -52,7 +59,8 @@ if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\nstool.exe --nacp ./cont
 if not "%nrofile%"=="" if not "%nropath%"=="" type nul> romfs/nextNroPath
 if not "%nrofile%"=="" if not "%nropath%"=="" type nul> romfs/nextArgv
 if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" echo|set /p="sdmc:%nropath%"> romfs/nextNroPath
-if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" echo|set /p="sdmc:%nropath%"> romfs/nextArgv
+if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" if "%rompath%"=="" echo|set /p="sdmc:%nropath%"> romfs/nextArgv
+if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" if not "%rompath%"=="" echo|set /p="sdmc:%rompath%"> romfs/nextArgv
 if not "%nrofile%"=="" if "%nropath%"=="romfs" echo|set /p="romfs:/app.nro"> romfs/nextNroPath
 if not "%nrofile%"=="" if "%nropath%"=="romfs" echo|set /p="romfs:/app.nro"> romfs/nextArgv
 if not "%nrofile%"=="" if "%nropath%"=="romfs" copy /Y "%nrofile%" "romfs/app.nro" >NUL
