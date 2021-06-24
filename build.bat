@@ -39,7 +39,7 @@ echo Building...
 echo ID: %id%
 if not "%nropath%"=="" echo Path: %nropath%
 if not "%nrofile%"=="" echo File: %nrofile%
-if not "%romfile%"=="" echo Rom: %romfile%
+if not "%rompath%"=="" echo Rom: %rompath%
 echo.
 
 if not "%nrofile%"=="" if "%nropath%"=="" echo Error: Need "nropath" to continue, aborting...
