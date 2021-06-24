@@ -51,8 +51,11 @@ if "%nropath%"=="" if "%nrofile%"=="" .\Windows\hacbrewpack.exe --noromfs --titl
 if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\nstool.exe --nacp ./control/control.nacp --icon ./control/icon_AmericanEnglish.dat -t nro %nrofile%
 if not "%nrofile%"=="" if not "%nropath%"=="" type nul> romfs/nextNroPath
 if not "%nrofile%"=="" if not "%nropath%"=="" type nul> romfs/nextArgv
-if not "%nrofile%"=="" if not "%nropath%"=="" echo|set /p="%nropath%"> romfs/nextNroPath
-if not "%nrofile%"=="" if not "%nropath%"=="" echo|set /p="%nropath%"> romfs/nextArgv
+if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" echo|set /p="sdmc:%nropath%"> romfs/nextNroPath
+if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" echo|set /p="sdmc:%nropath%"> romfs/nextArgv
+if not "%nrofile%"=="" if "%nropath%"=="romfs" echo|set /p="romfs:/app.nro"> romfs/nextNroPath
+if not "%nrofile%"=="" if "%nropath%"=="romfs" echo|set /p="romfs:/app.nro"> romfs/nextArgv
+if not "%nrofile%"=="" if "%nropath%"=="romfs" copy /Y "%nrofile%" "romfs/app.nro" >NUL
 if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\hacbrewpack.exe --titleid %id% --nspdir .\ -k ./prod.keys --keygeneration 3
 
 echo.
@@ -63,6 +66,7 @@ del .\control\control.nacp
 del .\exefs\main.npdm
 if not "%nrofile%"=="" if not "%nropath%"=="" del .\romfs\nextNroPath
 if not "%nrofile%"=="" if not "%nropath%"=="" del .\romfs\nextArgv
+if not "%nrofile%"=="" if "%nropath%"=="romfs" del .\romfs\app.nro
 
 echo.
 echo %id%.nsp is ready
