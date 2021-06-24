@@ -24,8 +24,46 @@ if %rand%==16 set rand!n!=0
 if !n!==11 goto end
 if !n! LSS 11 goto loop
 :end
+
+set nrofile=%1
+set nropath=%2
+set id=%3
+
+if "%id%"=="" set id=05%rand1%%rand2%%rand3%%rand4%%rand5%%rand6%%rand7%%rand8%%rand9%%rand10%%rand11%000
+if "%nrofile%"=="" set id=05b25dc3089c0000
+
 echo.
-echo Random TitleID : 05%rand1%%rand2%%rand3%%rand4%%rand5%%rand6%%rand7%%rand8%%rand9%%rand10%%rand11%000
+echo Building...
+echo ID: %id%
+if not "%nropath%"=="" echo Path: %nropath%
+if not "%nrofile%"=="" echo File: %nrofile%
 echo.
+
+if not "%nrofile%"=="" if "%nropath%"=="" echo Error: Need "nropath" to continue, aborting...
+if not "%nrofile%"=="" if "%nropath%"=="" pause
+if not "%nrofile%"=="" if "%nropath%"=="" exit
+
+copy /Y default.npdm "exefs/main.npdm" >NUL
+if "%nropath%"=="" if "%nrofile%"=="" copy /Y default.dat "control/icon_AmericanEnglish.dat" >NUL
+if "%nropath%"=="" if "%nrofile%"=="" copy /Y default.nacp "control/control.nacp" >NUL
+if "%nropath%"=="" if "%nrofile%"=="" .\Windows\hacbrewpack.exe --noromfs --titleid %id% --nspdir .\ -k ./prod.keys --keygeneration 3
+
+if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\nstool.exe --nacp ./control/control.nacp --icon ./control/icon_AmericanEnglish.dat -t nro %nrofile%
+if not "%nrofile%"=="" if not "%nropath%"=="" type nul> romfs/nextNroPath
+if not "%nrofile%"=="" if not "%nropath%"=="" type nul> romfs/nextArgv
+if not "%nrofile%"=="" if not "%nropath%"=="" echo|set /p="%nropath%"> romfs/nextNroPath
+if not "%nrofile%"=="" if not "%nropath%"=="" echo|set /p="%nropath%"> romfs/nextArgv
+if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\hacbrewpack.exe --titleid %id% --nspdir .\ -k ./prod.keys --keygeneration 3
+
+echo.
+echo Cleaning...
+rmdir /S/Q hacbrewpack_backup
+del .\control\icon_AmericanEnglish.dat
+del .\control\control.nacp
+del .\exefs\main.npdm
+if not "%nrofile%"=="" if not "%nropath%"=="" del .\romfs\nextNroPath
+if not "%nrofile%"=="" if not "%nropath%"=="" del .\romfs\nextArgv
+
+echo.
+echo %id%.nsp is ready!
 pause
-exit
