@@ -65,5 +65,5 @@ if not "%nrofile%"=="" if not "%nropath%"=="" del .\romfs\nextNroPath
 if not "%nrofile%"=="" if not "%nropath%"=="" del .\romfs\nextArgv
 
 echo.
-echo %id%.nsp is ready!
+echo %id%.nsp is ready
 pause
