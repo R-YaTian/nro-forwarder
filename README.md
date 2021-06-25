@@ -3,6 +3,7 @@ Easy nro-forwarder tools for HOS 12+
 ## Build
 Run build_template.bat to make the template file
 ## Usage
+### Put "prod.keys" file on the same folders as "build.bat"
 #### Normal:
 build.bat hbmenu.nro /hbmenu.nro 05b25dc3089c0000  
 build.bat D:\Downloads\hbmenu.nro /hbmenu.nro 05b25dc3089c0000
