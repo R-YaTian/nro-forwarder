@@ -17,6 +17,6 @@ build.bat mesen_libretro_libnx.nro /retroarch/cores/mesen_libretro_libnx.nro ran
 Make a Multi-Platform GUI for the tool (may use python with tkinter)
 ## Credits
 nx-hbloader from switchbrew  
-a nx-hbloader fork from dezem  
+nx-hbloader-retroarch-forwarder-mod from natinusala  
 hacBrewPack from The-4n  
 nstool from jakcron
