@@ -9,8 +9,8 @@ build.bat hbmenu.nro /hbmenu.nro 05b25dc3089c0000
 build.bat D:\Downloads\hbmenu.nro /hbmenu.nro 05b25dc3089c0000
 #### Random Title ID:
 build.bat hbmenu.nro /hbmenu.nro rand
-#### Use romfs mode (may not works fine):
-build.bat hbmenu.nro romfs 05b25dc3089c0000
+#### Use romfs mode (may not works fine if nro has romfs):
+build.bat mtp-server-nx.nro romfs rand
 #### RetroArch Rom Forwarder (don't support romfs mode):
 build.bat mesen_libretro_libnx.nro /retroarch/cores/mesen_libretro_libnx.nro rand /roms/NES/SMB.nes
 ## TODO
