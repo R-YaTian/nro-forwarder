@@ -7,7 +7,7 @@
 #define DEFAULT_NRO "sdmc:/hbmenu.nro"
 
 const char g_noticeText[] =
-    "nro-forwarder " "V1.0.1" "\0"
+    "nro-forwarder " "V1.0.2" "\0"
     "Do you mean to tell me that you're thinking seriously of building that way, when and if you are an architect?";
 
 static char g_argv[2048];
@@ -386,7 +386,7 @@ void loadNro(void)
                 memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
             }
 
-            romfsExit();
+            //romfsExit();
         }
         else
         {
