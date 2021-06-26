@@ -60,7 +60,7 @@ if not "%nrofile%"=="" if not "%nropath%"=="" type nul> romfs/nextNroPath
 if not "%nrofile%"=="" if not "%nropath%"=="" type nul> romfs/nextArgv
 if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" echo|set /p="sdmc:%nropath%"> romfs/nextNroPath
 if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" if "%rompath%"=="" echo|set /p="sdmc:%nropath%"> romfs/nextArgv
-if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" if not "%rompath%"=="" echo|set /p="sdmc:%rompath%"> romfs/nextArgv
+if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfs" if not "%rompath%"=="" echo|set /p=sdmc:%nropath% "sdmc:%rompath%"> romfs/nextArgv
 if not "%nrofile%"=="" if "%nropath%"=="romfs" echo|set /p="romfs:/app.nro"> romfs/nextNroPath
 if not "%nrofile%"=="" if "%nropath%"=="romfs" echo|set /p="romfs:/app.nro"> romfs/nextArgv
 if not "%nrofile%"=="" if "%nropath%"=="romfs" copy /Y "%nrofile%" "romfs/app.nro" >NUL
