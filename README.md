@@ -14,7 +14,7 @@ build.bat hbmenu.nro romfs 05b25dc3089c0000
 #### RetroArch Rom Forwarder (don't support romfs mode):
 build.bat mesen_libretro_libnx.nro /retroarch/cores/mesen_libretro_libnx.nro rand /roms/NES/SMB.nes
 ## TODO
-Make a cross-platform GUI for the tool (may use python with tkinter)
+Make a Multi-Platform GUI for the tool (may use python with tkinter)
 ## Credits
 nx-hbloader from switchbrew  
 a nx-hbloader fork from dezem  
