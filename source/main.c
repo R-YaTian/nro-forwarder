@@ -436,10 +436,10 @@ void loadNro(void)
 
     if (g_nextNroPath[0] == '\0')
     {
-	    if (g_exitAppOnReturn)
+        if (g_exitAppOnReturn)
             selfExit();
 
-	    g_exitAppOnReturn = true;
+        g_exitAppOnReturn = true;
         Result rc = romfsInit();
         if (R_SUCCEEDED(rc))
         {
