@@ -436,10 +436,10 @@ void loadNro(void)
 
     if (g_nextNroPath[0] == '\0')
     {
-		if (g_exitAppOnReturn)
+	    if (g_exitAppOnReturn)
             selfExit();
 
-		g_exitAppOnReturn = true;
+	    g_exitAppOnReturn = true;
         Result rc = romfsInit();
         if (R_SUCCEEDED(rc))
         {
@@ -611,7 +611,7 @@ void loadNro(void)
     svcBreak(BreakReason_NotificationOnlyFlag | BreakReason_PostLoadDll, g_nroAddr, g_nroSize);
 
     nroEntrypointTrampoline(&entries[0], -1, g_nroAddr);
-	romfsExit();
+    romfsExit();
 }
 
 int main(int argc, char **argv)
