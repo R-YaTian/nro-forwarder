@@ -444,7 +444,7 @@ void loadNro(void)
     rc = fsdevMountSdmc();
     if (R_FAILED(rc)) {
         diagAbortWithResult(MAKERESULT(Module_HomebrewLoader, 404));
-	}
+    }
 
     if (g_nextNroPath[0] == '\0')
     {
@@ -461,10 +461,10 @@ void loadNro(void)
                 memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
             }
             if (!FileExists(g_nextNroPath))
-			{
+            {
                 memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
                 memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
-			}
+            }
         }
         else
         {
