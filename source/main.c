@@ -460,7 +460,7 @@ void loadNro(void)
                 memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
                 memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
             }
-			if (!FileExists(g_nextNroPath))
+            if (!FileExists(g_nextNroPath))
 			{
                 memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
                 memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
@@ -504,7 +504,7 @@ void loadNro(void)
         diagAbortWithResult(MAKERESULT(Module_HomebrewLoader, 7));
 
     close(fd);
-	romfsExit();
+    romfsExit();
     fsdevUnmountAll();
 
     size_t total_size = header->size + header->bss_size;
