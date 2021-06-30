@@ -3,11 +3,12 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define DEFAULT_NRO "sdmc:/hbmenu.nro"
 
 const char g_noticeText[] =
-    "nro-forwarder " "V1.0.4" "\0"
+    "nro-forwarder " "V1.0.5" "\0"
     "Do you mean to tell me that you're thinking seriously of building that way, when and if you are an architect?";
 
 static char g_argv[2048];
@@ -391,6 +392,59 @@ fail0:
     }
 }
 
+bool CopyFile(char *src, char *dst)
+{
+    int buf_size = 10240;
+    FILE* fin;
+    FILE* fout;
+    char* buff;
+    int rest;
+
+    fin = fopen(src, "r");
+    if (NULL == fin)
+    {
+        return false;
+    }
+
+    fout = fopen(dst, "w");
+    if (NULL == fout)
+    {
+        fclose(fin);
+        return false;
+    }
+
+    buff = malloc(buf_size);
+    if (NULL == buff)
+    {
+        fclose(fin);
+        fclose(fout);
+        remove(dst);
+        return false;
+    }
+
+    while (1)
+    {
+        rest = fread(buff, 1, buf_size, fin);
+
+        if (rest != buf_size)
+        {
+            fwrite(buff, rest, 1, fout);
+        }
+        else
+        {
+            fwrite(buff, buf_size, 1, fout);
+        }
+
+        if (feof(fin))
+            break;
+    }
+
+    fclose(fin);
+    fclose(fout);
+    free(buff);
+    return true;
+}
+
 bool FileExists(char *path) {
     if(access(path, F_OK) == 0)
         return true;
@@ -455,12 +509,27 @@ void loadNro(void)
         Result rc = romfsInit();
         if (R_SUCCEEDED(rc))
         {
-            if (!readAndCopy(g_nextNroPath, "romfs:/nextNroPath") || !readAndCopy(g_nextArgv, "romfs:/nextArgv"))
+            if ((!readAndCopy(g_nextNroPath, "romfs:/nextNroPath") || !readAndCopy(g_nextArgv, "romfs:/nextArgv")) && !FileExists("romfs:/app.fwd"))
             {
                 memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
                 memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
             }
-            if (!FileExists(g_nextNroPath))
+            else if (FileExists("romfs:/app.fwd"))
+            {
+                char dstpath[] = "sdmc:/Temp.fwd";
+                if (CopyFile("romfs:/app.fwd", dstpath))
+                {
+                    romfsExit();
+                    memcpy(g_nextNroPath, dstpath, sizeof(dstpath));
+                    memcpy(g_nextArgv,    dstpath, sizeof(dstpath));
+                }
+                else
+                {
+                    memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
+                    memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
+                }
+            }
+            else if (!FileExists(g_nextNroPath))
             {
                 memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
                 memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
@@ -468,8 +537,8 @@ void loadNro(void)
         }
         else
         {
-               memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
-               memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
+            memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
+            memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
         }
     }
 
@@ -504,7 +573,11 @@ void loadNro(void)
         diagAbortWithResult(MAKERESULT(Module_HomebrewLoader, 7));
 
     close(fd);
-    romfsExit();
+    if (FileExists("romfs:/"))
+    {
+        romfsExit();
+    }
+    remove("sdmc:/Temp.fwd");
     fsdevUnmountAll();
 
     size_t total_size = header->size + header->bss_size;
