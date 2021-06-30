@@ -7,7 +7,7 @@
 #define DEFAULT_NRO "sdmc:/hbmenu.nro"
 
 const char g_noticeText[] =
-    "nro-forwarder " "V1.0.3" "\0"
+    "nro-forwarder " "V1.0.4" "\0"
     "Do you mean to tell me that you're thinking seriously of building that way, when and if you are an architect?";
 
 static char g_argv[2048];
@@ -391,6 +391,13 @@ fail0:
     }
 }
 
+bool FileExists(char *path) {
+    if(access(path, F_OK) == 0)
+        return true;
+    else
+        return false;
+}
+
 void loadNro(void)
 {
     NroHeader* header = NULL;
@@ -434,6 +441,11 @@ void loadNro(void)
         g_nroAddr = g_nroSize = 0;
     }
 
+    rc = fsdevMountSdmc();
+    if (R_FAILED(rc)) {
+        diagAbortWithResult(MAKERESULT(Module_HomebrewLoader, 404));
+	}
+
     if (g_nextNroPath[0] == '\0')
     {
         if (g_exitAppOnReturn)
@@ -448,6 +460,11 @@ void loadNro(void)
                 memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
                 memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
             }
+			if (!FileExists(g_nextNroPath))
+			{
+                memcpy(g_nextNroPath, DEFAULT_NRO, sizeof(DEFAULT_NRO));
+                memcpy(g_nextArgv,    DEFAULT_NRO, sizeof(DEFAULT_NRO));
+			}
         }
         else
         {
@@ -465,10 +482,6 @@ void loadNro(void)
     NroStart*  start  = (NroStart*)  (nrobuf + 0);
     header = (NroHeader*) (nrobuf + sizeof(NroStart));
     uint8_t*   rest   = (uint8_t*)   (nrobuf + sizeof(NroStart) + sizeof(NroHeader));
-
-    rc = fsdevMountSdmc();
-    if (R_FAILED(rc))
-        diagAbortWithResult(MAKERESULT(Module_HomebrewLoader, 404));
 
     int fd = open(g_nextNroPath, O_RDONLY);
     if (fd < 0)
@@ -491,6 +504,7 @@ void loadNro(void)
         diagAbortWithResult(MAKERESULT(Module_HomebrewLoader, 7));
 
     close(fd);
+	romfsExit();
     fsdevUnmountAll();
 
     size_t total_size = header->size + header->bss_size;
@@ -611,7 +625,6 @@ void loadNro(void)
     svcBreak(BreakReason_NotificationOnlyFlag | BreakReason_PostLoadDll, g_nroAddr, g_nroSize);
 
     nroEntrypointTrampoline(&entries[0], -1, g_nroAddr);
-    romfsExit();
 }
 
 int main(int argc, char **argv)
