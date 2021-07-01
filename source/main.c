@@ -8,7 +8,7 @@
 #define DEFAULT_NRO "sdmc:/hbmenu.nro"
 
 const char g_noticeText[] =
-    "nro-forwarder " "V1.0.6" "\0"
+    "nro-forwarder " "V1.0.7" "\0"
     "Do you mean to tell me that you're thinking seriously of building that way, when and if you are an architect?";
 
 static char g_argv[2048];
@@ -334,6 +334,13 @@ bool readAndCopy(char *dst, char *path)
     return true;
 }
 
+bool FileExists(char* path) {
+    if (access(path, F_OK) == 0)
+        return true;
+    else
+        return false;
+}
+
 static void selfExit(void) {
     Service applet, proxy, self;
     Result rc=0;
@@ -378,6 +385,15 @@ static void selfExit(void) {
     {
         serviceClose(&proxy);
         return;
+    }
+
+    rc = fsdevMountSdmc();
+    if (R_SUCCEEDED(rc))
+    {
+        if (FileExists("sdmc:/Temp.fwd"))
+        {
+            remove("sdmc:/Temp.fwd");
+        }
     }
 
     // Exit
@@ -438,13 +454,6 @@ bool CopyFile(char *src, char *dst)
     return true;
 }
 
-bool FileExists(char *path) {
-    if(access(path, F_OK) == 0)
-        return true;
-    else
-        return false;
-}
-
 void loadNro(void)
 {
     NroHeader* header = NULL;
@@ -491,6 +500,11 @@ void loadNro(void)
     rc = fsdevMountSdmc();
     if (R_FAILED(rc)) {
         diagAbortWithResult(MAKERESULT(Module_HomebrewLoader, 404));
+    }
+
+    if (FileExists("sdmc:/Temp.fwd"))
+    {
+        remove("sdmc:/Temp.fwd");
     }
 
     if (g_nextNroPath[0] == '\0')
@@ -702,7 +716,6 @@ int main(int argc, char **argv)
     getOwnProcessHandle();
     getCodeMemoryCapability();
     loadNro();
-
     diagAbortWithResult(MAKERESULT(Module_HomebrewLoader, 8));
     return 0;
 }
