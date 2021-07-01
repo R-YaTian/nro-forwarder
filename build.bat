@@ -25,10 +25,10 @@ if !n!==11 goto end
 if !n! LSS 11 goto loop
 :end
 
-set nrofile=%1
-set nropath=%2
-set id=%3
-set rompath=%4
+set nrofile=%~1
+set nropath=%~2
+set id=%~3
+set rompath=%~4
 
 if "%id%"=="" set id=05%rand1%%rand2%%rand3%%rand4%%rand5%%rand6%%rand7%%rand8%%rand9%%rand10%%rand11%000
 if "%id%"=="rand" set id=05%rand1%%rand2%%rand3%%rand4%%rand5%%rand6%%rand7%%rand8%%rand9%%rand10%%rand11%000
@@ -58,7 +58,7 @@ if "%nropath%"=="" if "%nrofile%"=="" copy /Y default.dat "control/icon_American
 if "%nropath%"=="" if "%nrofile%"=="" copy /Y default.nacp "control/control.nacp" >NUL
 if "%nropath%"=="" if "%nrofile%"=="" .\Windows\hacbrewpack.exe --noromfs --titleid %id% --nspdir .\ -k ./prod.keys --keygeneration 3
 
-if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\nstool.exe --nacp ./control/control.nacp --icon ./control/icon_AmericanEnglish.dat -t nro %nrofile%
+if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\nstool.exe --nacp ./control/control.nacp --icon ./control/icon_AmericanEnglish.dat -t nro "%nrofile%"
 if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\PatchTool.exe ./control/control.nacp nacp.ips ./control/control.nacp
 if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfsalt" type nul> romfs/nextNroPath
 if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfsalt" type nul> romfs/nextArgv

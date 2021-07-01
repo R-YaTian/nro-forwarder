@@ -8,7 +8,7 @@
 #define DEFAULT_NRO "sdmc:/hbmenu.nro"
 
 const char g_noticeText[] =
-    "nro-forwarder " "V1.0.5" "\0"
+    "nro-forwarder " "V1.0.6" "\0"
     "Do you mean to tell me that you're thinking seriously of building that way, when and if you are an architect?";
 
 static char g_argv[2048];
@@ -340,11 +340,17 @@ static void selfExit(void) {
 
     rc = smInitialize();
     if (R_FAILED(rc))
-        goto fail0;
+    {
+        diagAbortWithResult(rc);
+        return;
+    }
 
     rc = smGetService(&applet, g_isApplication ? "appletOE" : "appletAE");
     if (R_FAILED(rc))
-        goto fail1;
+    {
+        smExit();
+        return;
+    }
 
     u32 cmd_id = g_isApplication ? 0 : 200;
     u64 reserved = 0;
@@ -358,7 +364,10 @@ static void selfExit(void) {
         .out_objects = &proxy,
     );
     if (R_FAILED(rc))
-        goto fail2;
+    {
+        serviceClose(&applet);
+        return;
+    }
 
     // GetSelfController
     rc = serviceDispatch(&proxy, 1,
@@ -366,30 +375,14 @@ static void selfExit(void) {
         .out_objects = &self,
     );
     if (R_FAILED(rc))
-        goto fail3;
+    {
+        serviceClose(&proxy);
+        return;
+    }
 
     // Exit
     rc = serviceDispatch(&self, 0);
-
     serviceClose(&self);
-
-fail3:
-    serviceClose(&proxy);
-
-fail2:
-    serviceClose(&applet);
-
-fail1:
-    smExit();
-
-fail0:
-    if (R_SUCCEEDED(rc)) {
-        while(1) svcSleepThread(86400000000000ULL);
-        svcExitProcess();
-        __builtin_unreachable();
-    } else {
-        diagAbortWithResult(rc);
-    }
 }
 
 bool CopyFile(char *src, char *dst)
@@ -519,7 +512,6 @@ void loadNro(void)
                 char dstpath[] = "sdmc:/Temp.fwd";
                 if (CopyFile("romfs:/app.fwd", dstpath))
                 {
-                    romfsExit();
                     memcpy(g_nextNroPath, dstpath, sizeof(dstpath));
                     memcpy(g_nextArgv,    dstpath, sizeof(dstpath));
                 }
@@ -577,7 +569,6 @@ void loadNro(void)
     {
         romfsExit();
     }
-    remove("sdmc:/Temp.fwd");
     fsdevUnmountAll();
 
     size_t total_size = header->size + header->bss_size;
