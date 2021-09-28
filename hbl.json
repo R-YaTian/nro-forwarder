@@ -11,8 +11,13 @@
   "is_64_bit": true,
   "address_space_type": 1,
   "is_retail": true,
+  "system_resource_size": "0x1FE00000",
+  "disable_device_address_space_merge": false,
   "filesystem_access": {
-    "permissions": "0xFFFFFFFFFFFFFFFF"
+    "permissions": "0xFFFFFFFFFFFFFFFF",
+    "content_owner_ids": [
+      "0x0100000000001000"
+    ]
   },
   "service_host": [
     "*"
