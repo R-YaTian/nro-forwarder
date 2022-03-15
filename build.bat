@@ -59,6 +59,7 @@ if "%nropath%"=="" if "%nrofile%"=="" copy /Y default.nacp "control/control.nacp
 if "%nropath%"=="" if "%nrofile%"=="" .\Windows\hacbrewpack.exe --noromfs --titleid %id% --nspdir .\ -k ./prod.keys --keygeneration 3
 
 if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\nstool.exe --nacp ./control/control.nacp --icon ./control/icon_AmericanEnglish.dat -t nro "%nrofile%"
+if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\rejpg.exe
 if not "%nrofile%"=="" if not "%nropath%"=="" .\Windows\PatchTool.exe ./control/control.nacp nacp.ips ./control/control.nacp
 if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfsalt" type nul> romfs/nextNroPath
 if not "%nrofile%"=="" if not "%nropath%"=="" if not "%nropath%"=="romfsalt" type nul> romfs/nextArgv
