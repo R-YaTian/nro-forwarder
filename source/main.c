@@ -8,7 +8,7 @@
 #define DEFAULT_NRO "sdmc:/hbmenu.nro"
 
 const char g_noticeText[] =
-    "nro-forwarder " "V1.0.7" "\0"
+    "nro-forwarder " "V1.0.8" "\0"
     "Do you mean to tell me that you're thinking seriously of building that way, when and if you are an architect?";
 
 static char g_argv[2048];
@@ -651,7 +651,8 @@ void loadNro(void)
         { EntryType_Argv,                 0, {0, 0} },
         { EntryType_NextLoadPath,         0, {0, 0} },
         { EntryType_LastLoadResult,       0, {0, 0} },
-        { EntryType_SyscallAvailableHint, 0, {0xffffffffffffffff, 0x9fc9fff0027ffff} },
+        { EntryType_SyscallAvailableHint, 0, {UINT64_MAX, UINT64_MAX} },
+        { EntryType_SyscallAvailableHint2,0, {UINT64_MAX, 0} },
         { EntryType_RandomSeed,           0, {0, 0} },
         { EntryType_UserIdStorage,        0, {(u64)(uintptr_t)&g_userIdStorage, 0} },
         { EntryType_HosVersion,           0, {0, 0} },
@@ -691,11 +692,11 @@ void loadNro(void)
     // LastLoadResult
     entries[6].Value[0] = g_lastRet;
     // RandomSeed
-    entries[8].Value[0] = randomGet64();
-    entries[8].Value[1] = randomGet64();
+    entries[9].Value[0] = randomGet64();
+    entries[9].Value[1] = randomGet64();
     // HosVersion
-    entries[10].Value[0] = hosversionGet();
-    entries[10].Value[1] = hosversionIsAtmosphere() ? 0x41544d4f53504852UL : 0; // 'ATMOSPHR'
+    entries[11].Value[0] = hosversionGet();
+    entries[11].Value[1] = hosversionIsAtmosphere() ? 0x41544d4f53504852UL : 0; // 'ATMOSPHR'
 
     g_nroAddr = (u64)map_addr;
     g_nroSize = nro_size;
