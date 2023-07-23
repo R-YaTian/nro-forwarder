@@ -3,6 +3,9 @@
   "title_id": "0x010000000000100D",
   "title_id_range_min": "0x010000000000100D",
   "title_id_range_max": "0x010000000000100D",
+  "program_id": "0x010000000000100D",
+  "program_id_range_min": "0x010000000000100D",
+  "program_id_range_max": "0x010000000000100D",
   "main_thread_stack_size": "0x100000",
   "main_thread_priority": 44,
   "default_cpu_id": 0,
@@ -246,8 +249,8 @@
     {
       "type": "debug_flags",
       "value": {
-        "allow_debug": false,
-        "force_debug": false
+        "allow_debug": true,
+        "force_debug": true
       }
     }
   ]
