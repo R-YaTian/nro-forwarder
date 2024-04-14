@@ -8,7 +8,7 @@
 #define DEFAULT_NRO "sdmc:/hbmenu.nro"
 
 const char g_noticeText[] =
-    "nro-forwarder " "V1.0.8" "\0"
+    "nro-forwarder " "V1.1.0" "\0"
     "Do you mean to tell me that you're thinking seriously of building that way, when and if you are an architect?";
 
 static char g_argv[2048];
@@ -47,7 +47,7 @@ bool __nx_fsdev_support_cwd = false;
 // Used by trampoline.s
 Result g_lastRet = 0;
 
-void NORETURN nroEntrypointTrampoline(const ConfigEntry* entries, u64 handle, u64 entrypoint);
+void NX_NORETURN nroEntrypointTrampoline(const ConfigEntry* entries, u64 handle, u64 entrypoint);
 
 void __libnx_initheap(void)
 {
