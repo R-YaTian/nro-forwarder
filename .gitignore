@@ -8,3 +8,5 @@ exefs/
 *.db
 *.zip
 *~
+prod.keys
+keys.txt
